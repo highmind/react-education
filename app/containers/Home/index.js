@@ -36,7 +36,7 @@ class Home extends Component{
         });
 
         //测试webpack反向代理，完整接口数据http://api.chinaplat.com/getval_2017
-
+        // 获取轮播图
         Axios.post('/getval_2017', searchData)
         .then(function (response) {
           console.log(response.data)
@@ -49,6 +49,7 @@ class Home extends Component{
           console.log(response);
         });
 
+        // 获推荐视频课程列表
         Axios.post('/getval_2017', qs.stringify({
           Action: 'GetTJCourseList',
           Types : '0'
@@ -65,6 +66,7 @@ class Home extends Component{
           console.log(response);
         });
 
+        // 获取推荐音频课程列表
         Axios.post('/getval_2017', qs.stringify({
           Action: 'GetTJCourseList',
           Types : '1'
@@ -81,22 +83,6 @@ class Home extends Component{
           console.log(response);
         });
 
-
-
-        // Axios.get(url).then(function(res){
-        //     console.log('--------Containers/Home--------');
-        //     let data = res.data;
-        //     if(!self.ignoreLastFetch){
-        //         self.setState({
-        //             playingData : data.playingData,
-        //             comingData : data.comingData,
-        //             loading : false
-        //         })
-        //     }
-        //
-        //     // 设置滚动条位置
-        //     self.setPosition();
-        // })
 
     }
 
@@ -156,7 +142,7 @@ class Home extends Component{
         </div>;
         let cardFRNode = <span className="card-score">{dData.keshi}课时</span>;
         return(
-          <Link key={dData.kc_id} to={{ pathname: '/film', query: { id: dData.kc_id,kc_types:1 } }}>
+          <Link key={dData.kc_id} to={{pathname:'/film',query:{id:dData.kc_id,kc_types:1}}}>
             <Card
               key={dData.kc_id}
               data={dData}
@@ -180,7 +166,7 @@ class Home extends Component{
         let cardFLNode = <h4 className="card-title2">{dData.title}</h4>;
         let cardFRNode = <span className="card-time">{dData.money}积分</span>;
         return(
-          <Link key={dData.kc_id} to={{ pathname: '/film', query: { id: dData.kc_id,kc_types:0 } }}>
+          <Link key={dData.kc_id} to={{ pathname: '/film',query:{id:dData.kc_id,kc_types:0}}}>
             <Card
               key={dData.kc_id}
               data={dData}

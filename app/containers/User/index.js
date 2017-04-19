@@ -4,7 +4,7 @@ import qs from 'qs';
 import Axios from 'axios'; //引入axios处理ajax
 import md5 from 'md5';  // 引入md5加密密码
 import './index.css';
-//首页页面
+//用户登录
 class User extends Component{
     constructor(props){
         super(props);
@@ -15,7 +15,16 @@ class User extends Component{
 
 
     componentDidMount(){
-
+      let loginToken = localStorage.getItem('loginToken');
+      console.log(loginToken)
+      if(loginToken == null){ //如果获取不到缓存的token
+       console.log('token不存在')
+        // 跳转到登录页
+        this.props.router.push('/user');
+      }else{//否则跳转到个人用户中心
+        console.log('跳转到usercenter');
+        this.props.router.push('/usercenter');
+      }
     }
 
     componentDidUpdate(prevProps) {
@@ -37,13 +46,21 @@ class User extends Component{
         "ip" : '192.168.0.2'
       });
       console.log(userInfo);
-
+      let self = this;
       // 请求远程真实接口数据，进行登录
       Axios.post('/getval_2017', userInfo)
       .then(function (response) {
         let data = response.data;
-        if(data.errorCode == ''){
-          
+        // 登录失败提示
+        if(typeof(data.errorCode) != 'undefined'){
+          console.log(data.errorMessage);
+
+        }else{ //登录成功跳转导航home组件
+          console.log('登录成功');
+          console.log(data.acode)
+          localStorage.setItem('loginToken', data.acode);
+          localStorage.setItem('uId', data.username);
+          self.props.router.push('/home');
         }
       })
       .catch(function (response) {

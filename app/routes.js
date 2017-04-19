@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {Route, IndexRoute, Redirect, hashHistory, browserHistory} from 'react-router';
-import {App, Home, FilmList, Cinema, User, Detail} from './containers';
+import {App, Home, FilmList, Cinema, User, Detail, UserCenter} from './containers';
 
 export default (
     <Route path="/" component={App}>
@@ -9,7 +9,8 @@ export default (
         <Route path="/filmlist/:type" component={FilmList} /> //电影列表
         <Route path="/film" component={Detail} /> //电影详情
         <Route path="/cinema" component={Cinema} /> //影院
-        <Route path="/user" component={User} /> //用户中心
+        <Route path="/user" component={User} /> //用户中心登录
+        <Route path="/usercenter" component={UserCenter} /> //用户中心
         <Redirect from='*' to='/' />
     </Route>
 )

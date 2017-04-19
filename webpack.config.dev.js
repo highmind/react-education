@@ -78,8 +78,7 @@ module.exports =  {
     proxy: {  //反向代理，将ajax请求数据，转发，完整接口url为http://api.chinaplat.com/getval_2017
        '/getval_2017': {
        target: 'http://api.chinaplat.com',
-       changeOrigin: true,
-       secure: false
+       changeOrigin: true
        }
     }
   },

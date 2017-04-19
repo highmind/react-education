@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import {Card, Slider, Loading, Button} from '../../components';
 import {Link} from 'react-router';
+import qs from 'qs';
 import Axios from 'axios';
 import './index.css';
 
@@ -9,13 +10,13 @@ class Home extends Component{
         super(props);
         this.ignoreLastFetch = false;
         this.state = {
-          playingData : [],   //正在上映数据
-          comingData : [],   //即将上映数据
+          videoCourse : [],   //视频推荐课程
+          audioCourse : [],   //音频推荐课程
           slider : [],     //轮播图数据
           sliderId : 0,    //轮播图组件id
           loading : true   //loading参数
         }
-        this.props.actions.navBarSet("芝麻电影");
+        this.props.actions.navBarSet("中仕学社");
     }
 
     getData(){
@@ -25,37 +26,77 @@ class Home extends Component{
           loading : true   //loading参数
         })
 
+        // 如果要用 application/x-www-form-urlencoded 格式发送数据，数据必须是 URLSearchParams 类型，或者字符串参数 a=1&b=2 格式。
+
+
+
+        let self = this;
+        let searchData = qs.stringify({
+          Action : 'GetSlides'
+        });
+
         //测试webpack反向代理，完整接口数据http://api.chinaplat.com/getval_2017
-        Axios.post('/getval_2017', {
-          Action : 'GetCourseTypesList',
-          kc_types : '1'
-        })
+
+        Axios.post('/getval_2017', searchData)
         .then(function (response) {
-          console.log(response.data);
+          console.log(response.data)
+          self.setState({
+              slider : response.data.Slides.slice(0,5),
+              sliderId : '1',
+          })
+        })
+        .catch(function (response) {
+          console.log(response);
+        });
+
+        Axios.post('/getval_2017', qs.stringify({
+          Action: 'GetTJCourseList',
+          Types : '0'
+        }))
+        .then(function (response) {
+          console.log(response.data)
+          self.setState({
+              videoCourse : response.data.Course,
+              loading : false
+          })
+
+        })
+        .catch(function (response) {
+          console.log(response);
+        });
+
+        Axios.post('/getval_2017', qs.stringify({
+          Action: 'GetTJCourseList',
+          Types : '1'
+        }))
+        .then(function (response) {
+          console.log(response.data)
+          self.setState({
+              audioCourse : response.data.Course,
+              loading : false
+          })
+
         })
         .catch(function (response) {
           console.log(response);
         });
 
 
-        let self = this;
-        let url = 'http://mockdata/filmlist';
-        Axios.get(url).then(function(res){
-            console.log('--------Containers/Home--------');
-            let data = res.data;
-            if(!self.ignoreLastFetch){
-                self.setState({
-                    playingData : data.playingData,
-                    comingData : data.comingData,
-                    slider : data.slider.data,
-                    sliderId : data.slider.id,
-                    loading : false
-                })
-            }
 
-            // 设置滚动条位置
-            self.setPosition();
-        })
+        // Axios.get(url).then(function(res){
+        //     console.log('--------Containers/Home--------');
+        //     let data = res.data;
+        //     if(!self.ignoreLastFetch){
+        //         self.setState({
+        //             playingData : data.playingData,
+        //             comingData : data.comingData,
+        //             loading : false
+        //         })
+        //     }
+        //
+        //     // 设置滚动条位置
+        //     self.setPosition();
+        // })
 
     }
 
@@ -108,16 +149,16 @@ class Home extends Component{
     getFilmList(data){
       let nodes = data.map(function(dData){
         let cardFLNode = <div>
-          <h4 className="card-title">{dData.name}</h4>
+          <h4 className="card-title">{dData.title}</h4>
           <p className="card-text">
-            {dData.cinemaCount}家影院上映 {dData.watchCount}人购票
+            需{dData.money}积分
           </p>
         </div>;
-        let cardFRNode = <span className="card-score">{dData.grade}</span>;
+        let cardFRNode = <span className="card-score">{dData.keshi}课时</span>;
         return(
-          <Link key={dData.id} to={`/film/${dData.id}`}>
+          <Link key={dData.kc_id} to={{ pathname: '/film', query: { id: dData.kc_id,kc_types:1 } }}>
             <Card
-              key={dData.id}
+              key={dData.kc_id}
               data={dData}
               cardFooterLeft={cardFLNode}
               cardFooterRight={cardFRNode}
@@ -136,12 +177,12 @@ class Home extends Component{
 
     getCommingFilmList(data){
       let nodes = data.map(function(dData){
-        let cardFLNode = <h4 className="card-title2">{dData.name}</h4>;
-        let cardFRNode = <span className="card-time">{dData.showTime}上映</span>;
+        let cardFLNode = <h4 className="card-title2">{dData.title}</h4>;
+        let cardFRNode = <span className="card-time">{dData.money}积分</span>;
         return(
-          <Link key={dData.id} to={`/film/${dData.id}`}>
+          <Link key={dData.kc_id} to={{ pathname: '/film', query: { id: dData.kc_id,kc_types:0 } }}>
             <Card
-              key={dData.id}
+              key={dData.kc_id}
               data={dData}
               cardFooterLeft={cardFLNode}
               cardFooterRight={cardFRNode}
@@ -164,13 +205,13 @@ class Home extends Component{
                 <Loading active={this.state.loading} />
                 <div className={this.state.loading ? "con-hide" : "con-show"}>
                     <Slider id={this.state.sliderId} data={this.state.slider} />
-                    {this.getFilmList(this.state.playingData)}
+                    {this.getFilmList(this.state.audioCourse)}
                     <Link to="/filmlist/playing">
-                      <Button type="ghost" clsName="home-more">更多热映电影</Button>
+                      <Button type="ghost" clsName="home-more">更多视频课程</Button>
                     </Link>
-                    {this.getCommingFilmList(this.state.comingData)}
+                    {this.getCommingFilmList(this.state.videoCourse)}
                     <Link to="/filmlist/coming">
-                      <Button type="ghost" clsName="home-more">更多即将上映电影</Button>
+                      <Button type="ghost" clsName="home-more">更多音频课程</Button>
                     </Link>
                 </div>
             </div>

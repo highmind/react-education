@@ -475,5 +475,5 @@ Mock.mock('http://mockdata/coming?page=2&count=4', 'get', {
 
 // 设置数据延迟时间，模拟loading
 Mock.setup({
-    timeout: '300'
+    timeout: '0'
 })

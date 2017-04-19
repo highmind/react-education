@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Axios from 'axios'; //引入axios处理ajax
+import qs from 'qs';
 import {Loading, Button} from '../../components';
 // 只使用一个组件
 // import Button from 'antd-mobile/lib/button'
@@ -16,26 +17,36 @@ class Detail extends Component{
         }
     }
 
-    getData(id){
+    getData(kc_id, kc_types){
         let self = this;
-        let url = 'http://mockdata/detail';
-        Axios.get(url).then(function(res){
-            let filmData = res.data.film;
+        // let url = 'http://mockdata/detail';
+
+        Axios.post('/getval_2017', qs.stringify({
+          Action:'GetCourseInfo',
+          Kc_types : kc_types,
+          kc_id : kc_id
+          })).then(function(res){
+            console.log(res.data)
             self.setState({
-                data : filmData,
-                actor: filmData.actors,
+                data : res.data,
+                // actor: filmData.actors,
                 loading : false
             })
+            self.props.actions.navBarSet('中仕学社')
+          })
 
-            self.props.actions.navBarSet(filmData.name)
-        })
         window.scrollTo(0, 0);
     }
 
     componentDidMount(){
+      //接收router多个参数
+      console.log(this.props.location.query);
         // 初始化数据
-        let id = this.props.params.id;
-        this.getData(id);
+        let kc_id = this.props.location.query.id;
+        let kc_types = this.props.location.query.kc_types;
+        console.log(kc_types);
+        console.log(kc_id);
+        this.getData(kc_id, kc_types);
     }
 
     getActor(data){
@@ -53,7 +64,7 @@ class Detail extends Component{
 
     render(){
         const data = this.state.data;
-        const detailHeadstyle = {backgroundImage: `url(${data.origin})`};
+        const detailHeadstyle = {backgroundImage: `url(${data.kc_img})`};
         return(
             <div className="detail-wrap">
                 <Loading active={this.state.loading} />
@@ -63,27 +74,26 @@ class Detail extends Component{
                         <div className="detail-head">
                           <div className="img-filter" style={detailHeadstyle}></div>
                           <div className="detail-h-l">
-                            <img width="100%" src={data.origin} alt=""/>
+                            <img width="100%" src={data.kc_img} alt=""/>
                           </div>
                           <div className="detail-h-r">
-                            <p className="detail-title">{data.name}</p>
+                            <p className="detail-title">{data.kc_title}</p>
                             <p>{data.intro}</p>
-                            <p className="detail-score">{data.grade}分</p>
-                            <p>{data.category}</p>
-                            <p>{data.nation}/{data.mins}分钟</p>
+                            <p className="detail-score">{data.kc_money}分</p>
+                            <p>{data.teacher}/{data.keshi}课时</p>
                           </div>
                         </div>
                         <div className="pay-btn-wrap">
                           <Button clsName="pay-btn">
-                            立即购票
+                            立即购买
                           </Button>
                         </div>
                         <div className="detail-main">
                           <p>
-                            <span>演职人员</span>
-                            {this.getActor(this.state.actor)}
+                            <span>教师：</span>
+                            {data.teacher}
                           </p>
-                          <p>{data.synopsis}</p>
+                          <p>{data.kc_info}</p>
                         </div>
 
                     </div>

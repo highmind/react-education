@@ -6,12 +6,12 @@ class Card extends Component{
         super(props);
         this.state={}
     }
-    
+
     render(){
         let {data, cardFooterLeft, cardFooterRight} = this.props;
         return (
           <div className="card">
-              <img className="card-img" src={data.cover.origin} alt=""/>
+              <img className="card-img" src={data.img} alt=""/>
                 <div className="card-c">
                   <div className="card-l">
                     {cardFooterLeft}

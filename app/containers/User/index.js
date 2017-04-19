@@ -1,6 +1,8 @@
 import React, { ReactDOM,Component } from 'react'
 import {Button} from '../../components';
+import qs from 'qs';
 import Axios from 'axios'; //引入axios处理ajax
+import md5 from 'md5';  // 引入md5加密密码
 import './index.css';
 //首页页面
 class User extends Component{
@@ -28,11 +30,27 @@ class User extends Component{
     handleSubmit(){
       let username = this.refs.username.value.trim();
       let password = this.refs.password.value.trim();
-      let userInfo = {
-        "username" : username,
-        "passoword" : password
-      }
+      let userInfo = qs.stringify({
+        "Action" : 'Login',
+        "user" : username,
+        "pwd" : md5(password),
+        "ip" : '192.168.0.2'
+      });
       console.log(userInfo);
+
+      // 请求远程真实接口数据，进行登录
+      Axios.post('/getval_2017', userInfo)
+      .then(function (response) {
+        let data = response.data;
+        if(data.errorCode == ''){
+          
+        }
+      })
+      .catch(function (response) {
+        console.log(response);
+      });
+
+
     }
 
     render(){

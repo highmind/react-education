@@ -12,11 +12,12 @@ class Slider extends React.Component{
 
     makeChildren(data){
         let nodes = data.map(function(detail, index){
-            return(
-                <Link className="item" key={detail.id} to={detail.url}>
-                    <img src={detail.imgUrl}/>
-                </Link>
-            );
+              return(
+                  <Link className="item" key={detail.index} to={detail.url}>
+                      <img src={detail.pic}/>
+                  </Link>
+              );
+
         })
 
         return nodes;

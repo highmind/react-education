@@ -48,12 +48,12 @@ Mock.mock('http://mockdata/nav', 'get', {
         },
         {
             "link": "/filmlist/playing",
-            "name": "影片",
+            "name": "课程",
             "id": 1
         },
         {
             "link": "/cinema",
-            "name": "影院",
+            "name": "专题",
             "id": 2
         },
         {

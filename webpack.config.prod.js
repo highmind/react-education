@@ -20,7 +20,7 @@ module.exports =  {
   // output 是放入产生出来的结果的相关参数
   output: {
     path: `${__dirname}/dist`,
-    publicPath : '/',  //用于生成的 路径为 为 /index_bundle.js
+    publicPath : '.',  //用于生成的 路径为 为 /index_bundle.js
     filename: 'index_bundle.js',
   },
 
@@ -44,7 +44,7 @@ module.exports =  {
           use: ExtractTextPlugin.extract({
             fallback: "style-loader",
             use: "css-loader",
-            publicPath: "/dist"
+            publicPath: "."
           })
         },
 

@@ -68,7 +68,6 @@ class App extends Component{
         <Link className="right-btn-1" to="/user/">
           <Icon key="0" type="icon-user" />
         </Link>,
-        <a className="right-btn-2" href="#"><span className="city">秦皇岛</span><Icon key="1" type="icon-xiangxiajiantou" /></a>
       ];
 
       return(

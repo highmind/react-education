@@ -127,6 +127,7 @@ class FilmList extends Component{
     render(){
         return(
             <div className="main-con">
+
                <div className="filmlist-head">
                   <Link className="filmlist-type-link"
                     activeClassName="filmlist-active"

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Axios from 'axios'; //引入axios处理ajax
+import {Animate} from 'react-move'; //引入react-move库处理动画
 import qs from 'qs';
 import {Loading, Button} from '../../components';
 // 只使用一个组件
@@ -63,41 +64,52 @@ class Detail extends Component{
     }
 
     render(){
-        const data = this.state.data;
-        const detailHeadstyle = {backgroundImage: `url(${data.kc_img})`};
+        const data1 = this.state.data;
+        const detailHeadstyle = {backgroundImage: `url(${data1.kc_img})`};
         return(
             <div className="detail-wrap">
                 <Loading active={this.state.loading} />
-                <div className={this.state.loading ? "con-hide" : "con-show"}>
+              <Animate default={{opacity : 0}}
+                data={{opacity : `${this.state.loading ? 0 : 1}`}}
+                duration={300} easing='easeIn'>
+
+                {data => (
+
+                <div style={{opacity: `${data.opacity}`}}>
                     <div className="detail-con">
 
                         <div className="detail-head">
                           <div className="img-filter" style={detailHeadstyle}></div>
                           <div className="detail-h-l">
-                            <img width="100%" src={data.kc_img} alt=""/>
+                            <img width="100%" src={`${data1.kc_img}`} alt=""/>
                           </div>
                           <div className="detail-h-r">
-                            <p className="detail-title">{data.kc_title}</p>
-                            <p>{data.intro}</p>
-                            <p className="detail-score">{data.kc_money}分</p>
-                            <p>{data.teacher}/{data.keshi}课时</p>
+                            <p className="detail-title">{data1.kc_title}</p>
+                            <p>{data1.intro}</p>
+                            <p className="detail-score">{data1.kc_money}分</p>
+                            <p>{data1.teacher}/{data1.keshi}课时</p>
                           </div>
                         </div>
+
                         <div className="pay-btn-wrap">
-                          <Button clsName="pay-btn">
-                            立即购买
-                          </Button>
-                        </div>
+                           <Button clsName="pay-btn">
+                             立即购买
+                           </Button>
+                       </div>
+
+
                         <div className="detail-main">
                           <p>
                             <span>教师：</span>
-                            {data.teacher}
+                            {data1.teacher}
                           </p>
-                          <p>{data.kc_info}</p>
+                          <p>{data1.kc_info}</p>
                         </div>
 
                     </div>
                 </div>
+                )}
+                </Animate>
             </div>
 
         )

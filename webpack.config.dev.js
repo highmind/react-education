@@ -19,7 +19,7 @@ module.exports =  {
   //entry 入口源文件
   entry: {
     app: './app/index.js',
-    vendor:['react', 'react-dom', 'react-router', 'axios', 'redux', 'react-redux'] //分离库文件
+    vendor:['react', 'react-dom', 'react-router', 'axios', 'redux', 'react-redux','react-move'] //分离库文件
   },
 
   // output 输出路径

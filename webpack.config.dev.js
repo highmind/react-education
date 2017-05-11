@@ -93,7 +93,7 @@ module.exports =  {
       //2 处理react waring问题
       new webpack.DefinePlugin({
         "process.env": {
-          NODE_ENV: JSON.stringify("production")
+          NODE_ENV: JSON.stringify("development")
         }
       }),
 
